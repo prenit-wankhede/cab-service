@@ -1,0 +1,22 @@
+<button type="button" class="btn btn-primary" id="refresh-button">Refresh</button>
+
+<table class="table table-hover">
+<thead>
+  <tr>
+    <th>Request ID</th>
+    <th>Time of Request</th>
+    <th>Time Ellapsed</th>
+    <th>Status</th>
+  </tr>
+</thead>
+<tbody>
+	<% @cab_requests.each do |request| %>	
+		<tr>
+		    <td><%= request.id %></td>
+		    <td><%= request.created_at %></td>
+		    <td><%= ((Time.now - request.created_at)/(60)).to_i %> Mins</td>
+		    <td><%= request.status %></td>
+		</tr>
+	<% end %>
+</tbody>
+</table>

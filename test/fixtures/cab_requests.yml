@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  driver_id: 1
+  customer_id: 
+  status: 
+  finsihed_at: 2017-12-21 12:03:37
+
+two:
+  driver_id: 1
+  customer_id: 
+  status: 
+  finsihed_at: 2017-12-21 12:03:37
