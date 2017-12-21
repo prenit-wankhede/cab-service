@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>CabService</title>
+    <title>Chat</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -9,6 +9,22 @@
   </head>
 
   <body>
+  	<% flash.each do |key, value| %>
+	  <div class="alert alert-<%= key %>">
+	    <a href="#" data-dismiss="alert" class="close">×</a>
+	    <ul>
+	      <li>
+	        <%= value %>
+	      </li>
+	    </ul>
+	  </div>
+	<% end %>
+
+	<% if user_signed_in? %>
+	  <div>
+	  	<%= link_to('Logout', destroy_user_session_path, method: :delete) %>        
+	  </div>
+	<% end %>
     <%= yield %>
   </body>
 </html>
