@@ -46,9 +46,9 @@ test:
 #
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
-#
+
 production:
-  <<: *default
   database: cab_service_production
-  username: chat
-  password: <%= ENV['CHAT_DATABASE_PASSWORD'] %>
+  adapter: postgresql
+  host: localhost
+  password: 
