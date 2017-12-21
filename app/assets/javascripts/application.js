@@ -15,9 +15,3 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require_tree .
-
-$(document).ready(function(){
-	$("#refresh-button").click(function(){
-		window.location = window.location
-	})	
-})

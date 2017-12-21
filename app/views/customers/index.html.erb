@@ -1,43 +1,11 @@
 <%= form_tag("#", method: "post", id: "cab-request-form") do %>
   <%= label_tag(:customer_id, "Enter Customer Id") %>
   <br>
-  <%= text_field_tag(:customer_id, current_user.id, placeholder: "Customer Id") %>
+  <%= text_field_tag(:customer_id, "", placeholder: "Customer Id") %>
   <br>
   <br>
   <%= submit_tag("Submit") %>
 <% end %>
-
-<button type="button" class="btn btn-primary" id="refresh-button">Refresh</button>
-
-<ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#waiting">Waiting</a></li>
-  <li><a data-toggle="tab" href="#ongoing">Ongoing</a></li>
-  <li><a data-toggle="tab" href="#complete">Complete</a></li>
-</ul>
-
-<div class="tab-content">
-  <div id="waiting" class="tab-pane fade in active">
-    <ul class="list-group">
-    	<% @waiting_requests.each do |request| %>
-    		<li class="list-group-item"><%= request.id %></li>
-    	<% end %>	
-	</ul>
-  </div>
-  <div id="ongoing" class="tab-pane fade">
-    <ul class="list-group">
-    	<% @ongoing_requests.each do |request| %>
-    		<li class="list-group-item"><%= request.id %></li>
-    	<% end %>	
-	</ul>
-  </div>
-  <div id="complete" class="tab-pane fade">
-    <ul class="list-group">
-    	<% @complete_requests.each do |request| %>
-    		<li class="list-group-item"><%= request.id %></li>
-    	<% end %>	
-	</ul>
-  </div>
-</div>
 
 <script>
 	$("#cab-request-form").on("submit", function(){
@@ -49,9 +17,7 @@
 		  	data: formData
 		})
 		.done(function( response ) {
-		    
-		      console.log( "data: ", JSON.stringify(data));
-		    
+		   alert("cab request " + response.message + ". Cab Request Id is: " + response.cab_request_id) 
 		});
 		return false
 	})

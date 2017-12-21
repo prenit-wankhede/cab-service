@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  get :driverapp, to: "driver#index" do
+  get :driverapp, to: "drivers#index" do
 
   end
   
@@ -15,7 +15,11 @@ Rails.application.routes.draw do
 
   namespace :api do
   	namespace :one do
-  		resources :cab_requests	
+  		resources :cab_requests	do
+  			member do 
+  				post "process_request"
+  			end
+  		end
   	end
   end
 end

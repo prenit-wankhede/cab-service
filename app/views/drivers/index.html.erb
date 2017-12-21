@@ -1,1 +1,137 @@
-<h1> This is driver app page </h>
+<button type="button" class="btn btn-primary" id="refresh-button">Refresh</button>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#waiting">Waiting</a></li>
+  <li><a data-toggle="tab" href="#ongoing">Ongoing</a></li>
+  <li><a data-toggle="tab" href="#complete">Complete</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="waiting" class="tab-pane fade in active">
+    <ul class="list-group">
+    	<table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th>Request ID</th>
+			    <th>Time of Request</th>
+			    <th>Time Ellapsed</th>
+			    <th>Action</th>
+			  </tr>
+			</thead>
+			<tbody>
+				<% @waiting_requests.each do |request| %>
+					<tr>
+					    <td><%= request.id %></td>
+					    <td><%= request.created_at %></td>
+					    <td><%= ((Time.now - request.created_at)/(60)).to_i %> Mins</td>
+					    <td><button onclick="selectRequest(this)" style="float: right;" type="button" class="btn btn-primary" id="select-request-button" data-request-id="<%= request.id %>">Select</button></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>		
+	</ul>
+  </div>
+  <div id="ongoing" class="tab-pane fade">
+    <ul class="list-group">
+    	<table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th>Request ID</th>
+			    <th>Time of Request</th>
+			    <th>Time Ellapsed</th>
+			    <th>Action</th>
+			  </tr>
+			</thead>
+			<tbody>
+				<% @ongoing_requests.each do |request| %>
+					<tr>
+					    <td><%= request.id %></td>
+					    <td><%= request.created_at %></td>
+					    <td><%= ((Time.now - request.created_at)/(60)).to_i %> Mins</td>
+					    <td><button onclick="selectRequest(this)" style="float: right;" type="button" class="btn btn-primary" id="select-request-button" data-request-id="<%= request.id %>">Select</button></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>		
+    	
+	</ul>
+  </div>
+  <div id="complete" class="tab-pane fade">
+    <ul class="list-group">
+    	<table class="table table-hover">
+			<thead>
+			  <tr>
+			    <th>Request ID</th>
+			    <th>Time of Request</th>
+			    <th>Time Ellapsed</th>
+			    <th>Action</th>
+			  </tr>
+			</thead>
+			<tbody>
+				<% @complete_requests.each do |request| %>
+					<tr>
+					    <td><%= request.id %></td>
+					    <td><%= request.created_at %></td>
+					    <td><%= ((Time.now - request.created_at)/(60)).to_i %> Mins</td>
+					    <td><button onclick="selectRequest(this)" style="float: right;" type="button" class="btn btn-primary" id="select-request-button" data-request-id="<%= request.id %>">Select</button></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>		
+    	
+	</ul>
+  </div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		$("#refresh-button").click(function(){
+			$.ajax({
+				dataType: "json",
+				method: "GET",
+				url: "/api/one/cab_requests?" + "driver_id=<%= params[:id] %>",
+			})
+			.done(function( response ) {
+				$("#waiting").find(".list-group-item").remove()
+			    $.each(response.waiting_requests, function(index, request){
+		    		var row = '<li class="list-group-item" data-request-id="' + request.id + '">' + request.id + '<button onclick="selectRequest(this)" style="float: right;" type="button" class="btn btn-primary" id="select-request-button" data-request-id="' + request.id + '">Select</button></li>'
+		    		$("#waiting").find(".list-group").append(row)
+			    })
+			    
+			    $("#ongoing").find(".list-group-item").remove()
+			    $.each(response.ongoing_requests, function(index, request){
+		    		var row = '<li class="list-group-item">' + request.id + '</li>'
+		    		$("#ongoing").find(".list-group").append(row)
+			    })
+
+			    $("#complete").find(".list-group-item").remove()
+			    $.each(response.complete_requests, function(index, request){
+		    		var row = '<li class="list-group-item">' + request.id + '</li>'
+		    		$("#complete").find(".list-group").append(row)
+			    })
+			});
+		})	
+	})
+
+	var selectRequest = function(row) {
+		var requestId = $(row).data("request-id")
+		
+		$.ajax({
+			method: "POST",
+			url: "/api/one/cab_requests/" + requestId + "/process_request?driver_id=<%= params[:id] %>",
+		})
+		.done(function( response ) { 
+			$("#ongoing").find(".list-group").append('<li class="list-group-item">' + requestId + '</li>')
+		   	$('[href="#ongoing"]').tab('show')
+			$("li[data-request-id='"+ requestId + "']").remove()	
+		})
+		.fail(function( response ){
+			if(response.responseJSON.message == "failed" && response.responseJSON.reason == "“request no longer available") {
+				alert("request already booked for other drive")	
+				$("li[data-request-id='"+ requestId + "']").remove()
+			}else {
+				alert("failed because: " + response.responseJSON.reason)
+			}
+		});
+	}
+</script>
