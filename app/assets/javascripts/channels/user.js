@@ -1,3 +1,5 @@
+/*
+
 App.userSubscription = App.cable.subscriptions.create({channel: "UserChannel"}, {
   connected: function() {
     // Called when the subscription is ready for use on the server
@@ -13,3 +15,5 @@ App.userSubscription = App.cable.subscriptions.create({channel: "UserChannel"}, 
     alert("received data from websocket: " + JSON.stringify(data))
   }
 });
+
+*/
