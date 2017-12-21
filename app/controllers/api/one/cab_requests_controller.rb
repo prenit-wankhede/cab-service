@@ -30,9 +30,10 @@ class Api::One::CabRequestsController < ApplicationController
 			if(@cab_request.status == "waiting")
 				@cab_request.status = "ongoing"
 				@cab_request.driver_id = params[:driver_id]
+				@cab_request.updated_at = Time.now
 				if(@cab_request.save)
 					::CabRequestWorker.perform_in(5.minutes, @cab_request.id)
-					render json: {message: :selected}
+					render json: {message: :selected, cab_request_id: @cab_request.id, created_at: @cab_request.created_at, customer_id: @cab_request.customer_id}
 				else
 					render json: {message: :falied}, status: 500
 				end
