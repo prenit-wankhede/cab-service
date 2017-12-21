@@ -59,3 +59,7 @@ gem 'bootstrap-sass', '~> 3.3.7'
 gem 'jquery-rails'
 gem 'sidekiq'
 
+group :production do
+  gem 'pg'
+end
+
