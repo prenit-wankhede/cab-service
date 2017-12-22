@@ -3,13 +3,13 @@
 A simple cab request application for drivers and customer. Customer can place a cab request and one of 5 drivers will pick the request if the are available. 
 
 * Ruby version
-	2.1 and above
+	```2.1 and above```
 
 * Rails version
-	5.1.4
+	```5.1.4```
 
 * System dependencies
-	Ruby, Rails, MySQL (development), Postgres (production), node.js, redis
+	```Ruby, Rails, MySQL (development), Postgres (production), node.js, redis```
 
 * Configuration
 	run ```set RAILS_ENV=production```
@@ -43,10 +43,22 @@ A simple cab request application for drivers and customer. Customer can place a 
 	* Database Name: cab_service_development, cab_service_test on development, cab_service_production on production
 	* Tables: 
 		* cab_requests 
-			* Columns: id(integer), customer_id(integer), driver_id(integer), status(string), created_at(timestamp), updated_at(timestamp), finished_at(timestamp)
+			* Columns:   
+			id(integer),  
+			 customer_id(integer),  
+			  driver_id(integer),  
+			   status(string),  
+			    created_at(timestamp),  
+			     updated_at(timestamp),  
+			      finished_at(timestamp)  
 
 		* users (Optional. Present if Devise authentication is turned on)
-			* Columns: id(integer), email, passpord(string), is_online(boolean), created_at(timestamp), updated_at(timestamp)
+			* Columns: id(integer),  
+			            email(string),  
+			             passpord(string),  
+			              is_online(boolean),  
+			               created_at(timestamp),  
+			                updated_at(timestamp)  
 
 * Overview of Backed architecture
 	
@@ -54,13 +66,13 @@ A simple cab request application for drivers and customer. Customer can place a 
 
 	* List of Models
 
-		* CabRequest:
-			id,
-			customer_id,
-			driver_id,
-			status,
+		* CabRequest:  
+			id,  
+			customer_id,  
+			driver_id,  
+			status,  
 			created_at,
-			updated_at,
+			updated_at,  
 			finished_at
 
 	* List of Controllers
@@ -73,8 +85,10 @@ A simple cab request application for drivers and customer. Customer can place a 
 
 			* Methods
 
-				index: returns drivers waitin, ongoing and complete cab requests
-				create: creats a new cab request for given customer
+				index: returns drivers waitin, ongoing and complete cab requests  
+				
+				create: creats a new cab request for given customer  
+				
 				process_request: allocates given request to given drive if driver is available and request is not picked by other driver
 
 		* CustomersController
@@ -101,8 +115,8 @@ A simple cab request application for drivers and customer. Customer can place a 
 
 			perform: updates the ongoing requests as complete 5 min after request is picked by a driver and marks requests status as complete
 
+    * We have used 'sidekiq' gem for background job processing and redis for cache and in memory database
 
-	* We have used 'sidekiq' gem for background job processing and redis for cache and in memory database.		
 
 * List of HTML APIs
 
@@ -125,17 +139,17 @@ A simple cab request application for drivers and customer. Customer can place a 
 
 	* Dashboard app
 
-	```
+    ```
 	path: "/dashboard.html",
 	method: "GET"
 	response: HTML page listing all cab requests with thier id, time of request, time elapsed and status
-	```
+    ```
 
 * List of JSON APIs
 	
 	* Cab Requests API
-
-	* Get cab requests // Client Facing
+	
+	    * Get cab requests // Client Facing
 
 	```
 	path: "/api/one/cab_requests.json"
@@ -174,22 +188,23 @@ A simple cab request application for drivers and customer. Customer can place a 
 					]
 				}
 				status: 200 OK
-	```			
 
-	* Create cab request // Customer Facing
+* Create cab request // Customer Facing
 
-	```
+
 	path: "/api/one/cab_requests"			
 	method: "POST",
 	params: {customer_id: customer_id} // required params, if not present server will send status 500 response
 	resonpse: 	{message: created, cab_request_id: @cab_request.id}, status: 200 OK if created succesfully 
 				{message: failed, reason: resoan_for_failure}, status: 500 if failed to create cab request
 				status: 200 OK
-	```
+	
+	
+	
+* Select cab request // Driver Facing	
 
-	* Select cab request // Driver Facing	
 
-	```
+	
 	path: "api/one/cab_request/{:id}/process_request"
 	method: "POST",
 	params: {driver_id: driver_id}, // required_params, if not present server will send error message
@@ -207,7 +222,7 @@ A simple cab request application for drivers and customer. Customer can place a 
 					message: failed, reason: "“request no longer available" // if cab request is not available because it has been picked by other driver
 				}
 				status: 500 OK
-	```
+
 
 
 * ...	
