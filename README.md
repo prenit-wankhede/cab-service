@@ -188,10 +188,11 @@ A simple cab request application for drivers and customer. Customer can place a 
 					]
 				}
 				status: 200 OK
+	```		
 
 * Create cab request // Customer Facing
 
-
+	```
 	path: "/api/one/cab_requests"			
 	method: "POST",
 	params: {customer_id: customer_id} // required params, if not present server will send status 500 response
@@ -199,12 +200,12 @@ A simple cab request application for drivers and customer. Customer can place a 
 				{message: failed, reason: resoan_for_failure}, status: 500 if failed to create cab request
 				status: 200 OK
 	
-	
+	```
 	
 * Select cab request // Driver Facing	
 
 
-	
+	```
 	path: "api/one/cab_request/{:id}/process_request"
 	method: "POST",
 	params: {driver_id: driver_id}, // required_params, if not present server will send error message
@@ -222,8 +223,5 @@ A simple cab request application for drivers and customer. Customer can place a 
 					message: failed, reason: "“request no longer available" // if cab request is not available because it has been picked by other driver
 				}
 				status: 500 OK
-
-
-
-* ...	
+	```
 
