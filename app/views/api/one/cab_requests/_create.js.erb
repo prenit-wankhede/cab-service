@@ -1,0 +1,16 @@
+<% diffMins = ((Time.now - cab_request.created_at)/(60)).to_i %>
+var row = ['<tr class="request-row" data-request-id="' + "<%= cab_request.id %>" + '">',
+			'<td class="request-row">',
+				"<%= cab_request.id %>",
+			'</td>',
+			'<td>',
+				"<%= cab_request.customer_id %>",
+			'</td>',
+			'<td>',
+				"<%= diffMins %>" + ' Mins',
+			'</td>',
+			'<td>',
+				'<button onclick="selectRequest(this)" style="float: right;"" type="button" class="btn btn-primary" id="select-request-button" data-request-id="' + "<%= cab_request.id %>" + '">Select</button>',
+			'</td>',
+			'</tr>'].join("")
+$("#waiting").find("tbody").append(row)

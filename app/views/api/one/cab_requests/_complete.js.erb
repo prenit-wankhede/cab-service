@@ -1,0 +1,21 @@
+<% diffMins = ((Time.now - cab_request.created_at)/(60)).to_i %>
+
+var row = ['<tr class="request-row">',
+					'<td>',
+						<%= cab_request.id %>,
+					'</td>',
+					'<td>',
+						"<%= cab_request.customer_id %>",
+					'</td>',
+					'<td>',
+						"<%= diffMins %>" + ' Min',
+					'</td>',
+					'<td>',
+						'Just Now',
+					'</td>',
+					'<td>',
+					'</td>',
+					'</tr>'].join("")
+$("#complete").find("tbody").append(row)
+$('[href="#waiting"]').tab('show')
+$("tr[data-request-id='"+ <%= cab_request.id %> + "']").remove()
