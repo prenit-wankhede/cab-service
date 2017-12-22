@@ -28,8 +28,7 @@ A simple cab request application for drivers and customer. Customer can place a 
 * Deployment instructions
 	Run following commands:
 
-	```
-	git clone "https://bitbucket.org/prenit/cab_service"
+	```git clone "https://bitbucket.org/prenit/cab_service"
 	cd cab_service
 	bundle install
 	rake db:create
@@ -122,16 +121,14 @@ A simple cab request application for drivers and customer. Customer can place a 
 
 	* Customer app
 
-	```
-	path: "/customerapp.html",
+	```path: "/customerapp.html",
 	method: "GET",
 	response: HTML page with form to fill customer id and send cab request
 	```
 
 	* Driver app
 
-	```
-	path: "driverapp.html?id={driver_id}",
+	```path: "driverapp.html?id={driver_id}",
 	method: "GET",
 	params: {id: driver_id}, // required params. if not present error message page will be sent wth status code 200,
 	response: HTML page listing driver's waiting, ongoing and complete cab requests. Driver can select waiting rides if he is available. Button to asynchronously refresh the lists
@@ -139,8 +136,7 @@ A simple cab request application for drivers and customer. Customer can place a 
 
 	* Dashboard app
 
-    ```
-	path: "/dashboard.html",
+    ```path: "/dashboard.html",
 	method: "GET"
 	response: HTML page listing all cab requests with thier id, time of request, time elapsed and status
     ```
@@ -151,8 +147,7 @@ A simple cab request application for drivers and customer. Customer can place a 
 	
 	    * Get cab requests // Client Facing
 
-	```
-	path: "/api/one/cab_requests.json"
+	```path: "/api/one/cab_requests.json"
 	method: "GET",
 	params: {driver_id: driver_id}, // optional params. if not present response will only have array of waiting requests. If present, response will also 									have drives ongoing cab requests and completed requests
 	response: 	{
@@ -192,8 +187,7 @@ A simple cab request application for drivers and customer. Customer can place a 
 
 * Create cab request // Customer Facing
 
-	```
-	path: "/api/one/cab_requests"			
+	```path: "/api/one/cab_requests"			
 	method: "POST",
 	params: {customer_id: customer_id} // required params, if not present server will send status 500 response
 	resonpse: 	{message: created, cab_request_id: @cab_request.id}, status: 200 OK if created succesfully 
@@ -205,8 +199,7 @@ A simple cab request application for drivers and customer. Customer can place a 
 * Select cab request // Driver Facing	
 
 
-	```
-	path: "api/one/cab_request/{:id}/process_request"
+	```path: "api/one/cab_request/{:id}/process_request"
 	method: "POST",
 	params: {driver_id: driver_id}, // required_params, if not present server will send error message
 	response: 	{			
