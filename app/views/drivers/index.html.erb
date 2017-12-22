@@ -1,3 +1,4 @@
+<%= hidden_field_tag :driver_id, params[:id], id: "driver-id" %>
 <button type="button" class="btn btn-primary" id="refresh-button">Refresh</button>
 
 <ul class="nav nav-tabs">
@@ -45,7 +46,7 @@
 			</thead>
 			<tbody>
 				<% @ongoing_requests.each do |request| %>
-					<tr class="request-row">
+					<tr class="request-row" data-request-id="<% request.id %>">
 					    <td><%= request.id %></td>
 					    <td><%= request.customer_id %></td>
 					    <td><%= ((Time.now - request.created_at)/(60)).to_i %> Mins</td>
@@ -66,7 +67,7 @@
 			    <th>Request ID</th>
 			    <th>Customer ID</th>
 			    <th>Requested</th>
-			    <th>Picked</th>
+			    <th>Finished</th>
 			    <th>Action</th>
 			  </tr>
 			</thead>
@@ -89,6 +90,23 @@
 
 <script>
 	$(document).ready(function(){
+		var driver_id = $("#driver-id").val()
+		
+		App.userSubscription = App.cable.subscriptions.create({channel: "UserChannel", driver_id: driver_id}, {
+		  connected: function() {
+		    // Called when the subscription is ready for use on the server
+		  },
+
+		  disconnected: function() {
+		    // Called when the subscription has been terminated by the server
+		  },
+
+		  received: function(data) {
+		    // Called when there's incoming data on the websocket for this channel
+		    eval(data)
+		  }
+		});
+
 		$("#refresh-button").click(function(){
 			$.ajax({
 				dataType: "json",
@@ -121,7 +139,7 @@
 			    $.each(response.ongoing_requests, function(index, request){
 					var diffMins = diffInMinute(request.created_at)
 					var diffMins1  = diffInMinute(request.updated_at)
-		    		var row = ['<tr class="request-row">',
+		    		var row = ['<tr class="request-row" data-request-id="' + request.id + '">',
 		    					'<td>',
 		    						request.id,
 		    					'</td>',
@@ -144,7 +162,7 @@
 			    $.each(response.complete_requests, function(index, request){
 					var diffMins = diffInMinute(request.created_at)
 					var diffMins1 = diffInMinute(request.updated_at)
-			    	var row = ['<tr class="request-row">',
+			    	var row = ['<tr class="request-row" data-request-id="' + request.id + '">',
 		    					'<td>',
 		    						request.id,
 		    					'</td>',
@@ -176,7 +194,7 @@
 		.done(function( response ) { 
 			var diffMins = diffInMinute(response.created_at)
 			
-			var row = ['<tr class="request-row">',
+			var row = ['<tr class="request-row" data-request-id="' + response.cab_request_id + '">',
 		    					'<td>',
 		    						response.cab_request_id,
 		    					'</td>',
@@ -192,12 +210,13 @@
 		    					'<td>',
 		    					'</td>',
 		    					'</tr>'].join("")
-			$("#ongoing").find("tbody").append(row)
+		   	$("tr[data-request-id='"+ requestId + "']").remove()
+		   	$("#ongoing").find("tbody").append(row)
 		   	$('[href="#ongoing"]').tab('show')
-			$("tr[data-request-id='"+ requestId + "']").remove()
+			
 		})
 		.fail(function( response ){
-			if(response.responseJSON.message == "failed" && response.responseJSON.reason == "“request no longer available") {
+			if(response.responseJSON.message == "failed" && response.responseJSON.reason == "request no longer available") {
 				alert("request already booked for other drive")	
 				$("tr[data-request-id='"+ requestId + "']").remove()
 			}else {

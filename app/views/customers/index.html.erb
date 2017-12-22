@@ -1,7 +1,14 @@
 <%= form_tag("#", method: "post", id: "cab-request-form") do %>
   <%= label_tag(:customer_id, "Enter Customer Id") %>
+  <%= text_field_tag(:customer_id, "", placeholder: "Customer Id", required: true) %>
+  
   <br>
-  <%= text_field_tag(:customer_id, "", placeholder: "Customer Id") %>
+  <%= label_tag(:latitude, "Enter X location") %>
+  <%= number_field_tag(:latitude, "", placeholder: "X", required: true) %>
+
+  <br>
+  <%= label_tag(:longitude, "Enter Y location") %>
+  <%= number_field_tag(:longitude, "", placeholder: "Y", required: true) %>
   <br>
   <br>
   <%= submit_tag("Submit") %>
@@ -9,7 +16,7 @@
 
 <script>
 	$("#cab-request-form").on("submit", function(){
-		var formData = {customer_id: $("#customer_id").val()}
+		var formData = {customer_id: $("#customer_id").val(), latitude: $("#latitude").val(), longitude: $("#longitude").val()}
 		
 		$.ajax({
 			method: "POST",
@@ -18,6 +25,9 @@
 		})
 		.done(function( response ) {
 		   alert("cab request " + response.message + ". Cab Request Id is: " + response.cab_request_id) 
+		})
+		.fail(function( response ){
+			alert("failed because: " + response.responseJSON.reason)
 		});
 		return false
 	})
